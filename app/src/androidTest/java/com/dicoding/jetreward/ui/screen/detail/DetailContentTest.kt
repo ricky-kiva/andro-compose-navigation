@@ -7,6 +7,7 @@ import com.dicoding.jetreward.model.OrderReward
 import com.dicoding.jetreward.model.Reward
 import com.dicoding.jetreward.R
 import com.dicoding.jetreward.ui.theme.JetRewardTheme
+import com.dicoding.jetreward.utils.onNodeWithStringId
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -48,7 +49,7 @@ class DetailContentTest {
     @Test
     fun increaseProduct_buttonEnabled() {
         composeTestRule.onNodeWithContentDescription("Order Button").assertIsNotEnabled()
-        composeTestRule.onNodeWithText(composeTestRule.activity.getString(R.string.plus_symbol)).performClick()
+        composeTestRule.onNodeWithStringId(R.string.plus_symbol).performClick()
         composeTestRule.onNodeWithContentDescription("Order Button").assertIsEnabled()
     }
 }
