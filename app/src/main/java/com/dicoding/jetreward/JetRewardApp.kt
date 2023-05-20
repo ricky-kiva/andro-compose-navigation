@@ -1,5 +1,7 @@
 package com.dicoding.jetreward
 
+import android.content.Context
+import android.content.Intent
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
@@ -23,6 +25,7 @@ import com.dicoding.jetreward.ui.screen.home.HomeScreen
 import com.dicoding.jetreward.ui.screen.profile.ProfileScreen
 import com.dicoding.jetreward.ui.theme.JetRewardTheme
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.NavType
 import androidx.navigation.navArgument
 import com.dicoding.jetreward.ui.screen.detail.DetailScreen
@@ -49,7 +52,10 @@ fun JetRewardApp(
                     navController.navigate(Screen.DetailReward.createRoute(rewardId))
                 }
             ) }
-            composable(Screen.Cart.route) { CartScreen() }
+            composable(Screen.Cart.route) {
+                val context = LocalContext.current
+                CartScreen(onOrderButtonClicked = { message -> shareOrder(context, message) })
+            }
             composable(Screen.Profile.route) { ProfileScreen() }
             composable(
                 route = Screen.DetailReward.route,
@@ -113,4 +119,14 @@ fun JetHeroesAppPreview() {
     JetRewardTheme {
         JetRewardApp()
     }
+}
+
+private fun shareOrder(context: Context, summary: String) {
+    val intent = Intent(Intent.ACTION_SEND).apply {
+        type = "text/plain"
+        putExtra(Intent.EXTRA_SUBJECT, context.getString(R.string.dicoding_reward))
+        putExtra(Intent.EXTRA_TEXT, summary)
+    }
+
+    context.startActivity(Intent.createChooser(intent, context.getString(R.string.dicoding_reward)))
 }

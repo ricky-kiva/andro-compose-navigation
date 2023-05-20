@@ -25,7 +25,8 @@ import com.dicoding.jetreward.ui.components.OrderButton
 
 @Composable
 fun CartScreen(
-    viewModel: CartViewModel = viewModel(factory = ViewModelFactory(Injection.provideRepository()))
+    viewModel: CartViewModel = viewModel(factory = ViewModelFactory(Injection.provideRepository())),
+    onOrderButtonClicked: (String) -> Unit
 ) {
     viewModel.uiState.collectAsState(initial = UiState.Loading).value.let { uiState ->
         when (uiState) {
@@ -35,7 +36,8 @@ fun CartScreen(
             is UiState.Success -> {
                 CartContent(
                     state = uiState.data,
-                    onProductCountChanged = { rewardId, count -> viewModel.updateOrderReward(rewardId, count) }
+                    onProductCountChanged = { rewardId, count -> viewModel.updateOrderReward(rewardId, count) },
+                    onOrderButtonClicked = onOrderButtonClicked
                 )
             }
             is UiState.Error -> {}
@@ -47,8 +49,11 @@ fun CartScreen(
 fun CartContent(
     state: CartState,
     onProductCountChanged: (id: Long, count: Int) -> Unit,
+    onOrderButtonClicked: (String) -> Unit,
     modifier: Modifier = Modifier
 ) {
+    val shareMessage = stringResource(R.string.share_message, state.orderReward.count(), state.totalRequiredPoint)
+
     Column(modifier = modifier.fillMaxSize()) {
         TopAppBar(backgroundColor = MaterialTheme.colors.surface) {
             Text(
@@ -64,7 +69,7 @@ fun CartContent(
         OrderButton(
             text = stringResource(R.string.total_order, state.totalRequiredPoint),
             enabled = state.orderReward.isNotEmpty(),
-            onClick = {},
+            onClick = { onOrderButtonClicked(shareMessage) },
             modifier = Modifier.padding(16.dp)
         )
         LazyColumn(
