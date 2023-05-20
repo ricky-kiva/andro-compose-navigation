@@ -32,8 +32,8 @@ class RewardRepository {
         val index = orderRewards.indexOfFirst { it.reward.id == rewardId }
         val result = if (index >= 0) {
             val orderReward = orderRewards[index]
-            orderRewards[index] =
-                orderReward.copy(reward = orderReward.reward, count = newCountValue)
+            // make new copy of `orderReward`, but change the `count`
+            orderRewards[index] = orderReward.copy(reward = orderReward.reward, count = newCountValue)
             true
         } else {
             false
