@@ -14,6 +14,7 @@ import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.dicoding.jetreward.ui.navigation.NavigationItem
 import com.dicoding.jetreward.ui.navigation.Screen
@@ -21,6 +22,7 @@ import com.dicoding.jetreward.ui.screen.cart.CartScreen
 import com.dicoding.jetreward.ui.screen.home.HomeScreen
 import com.dicoding.jetreward.ui.screen.profile.ProfileScreen
 import com.dicoding.jetreward.ui.theme.JetRewardTheme
+import androidx.compose.runtime.getValue
 
 @Composable
 fun JetRewardApp(
@@ -46,6 +48,9 @@ fun JetRewardApp(
 @Composable
 private fun BottomBar(navController: NavHostController, modifier: Modifier = Modifier) {
     BottomNavigation(modifier = modifier) {
+        val navBackStackEntry by navController.currentBackStackEntryAsState() // get current BackStackEntry
+        val currentRoute = navBackStackEntry?.destination?.route
+
         val navigationItems = listOf(
             NavigationItem(stringResource(R.string.menu_home), Icons.Default.Home, Screen.Home),
             NavigationItem(stringResource(R.string.menu_cart), Icons.Default.ShoppingCart, Screen.Cart),
@@ -54,7 +59,7 @@ private fun BottomBar(navController: NavHostController, modifier: Modifier = Mod
         BottomNavigation {
             navigationItems.map { item ->
                 BottomNavigationItem(
-                    selected = true,
+                    selected = currentRoute == item.screen.route,
                     icon = { Icon(imageVector = item.icon, contentDescription = item.title) },
                     label = { Text(item.title) },
                     onClick = {
