@@ -156,7 +156,7 @@ fun DetailContentPreview() {
     JetRewardTheme {
         DetailContent(
             R.drawable.reward_4,
-            "Jaket Hoodie Dicoding",
+            "Dicoding Hoodie Jacket",
             7500,
             1,
             onBackClick = {},
