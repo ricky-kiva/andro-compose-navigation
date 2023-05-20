@@ -7,7 +7,7 @@ import androidx.navigation.compose.ComposeNavigator
 import androidx.navigation.testing.TestNavHostController
 import com.dicoding.jetreward.ui.navigation.Screen
 import com.dicoding.jetreward.ui.theme.JetRewardTheme
-import org.junit.Assert.assertEquals
+import com.dicoding.jetreward.utils.assertCurrentRouteName
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -30,8 +30,7 @@ class JetRewardAppTest {
 
     @Test
     fun navHost_verifyStartDestination() {
-        val currentRoute = navController.currentBackStackEntry?.destination?.route
-        assertEquals(Screen.Home.route, currentRoute)
+        navController.assertCurrentRouteName(Screen.Home.route)
     }
 
 }
